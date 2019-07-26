@@ -1,0 +1,64 @@
+创建基本模板
+npm i
+分析项目（顶部底部不变，路由分发，中间留坑变动）
+app.vue(顶部+中间+底部)mint-ui+MUI    ,中间留坑切换展示路由区域<link-view></link-view>
+把项目放到码云中：在根目录设置配置文件.gitignore和README.md和开源协议(此处用的MIT)
+        git init创建本地仓储（初始化）
+        git status查看文件状态
+        git add .添加到根目录
+        git commit -m "init my project"初始化项目
+        上传远端仓储（github或者码云）详情参看官网
+                如何使用传统方式上传到修改了的代码文件：1、git add .  2、 git commit -m "提交信息"  3、git push
+修改小图标：MUI中拷贝扩展样式和文件，引入main.js中，具体用到的地方再更改图标对应的代码
+把底部图标配置四个路由：引进安装挂载，app.vue四个功能的链接改为<router-link to='/指定路由名'>，路由中实现切换高亮效果
+创建四个对应的组件，并且点击切换组件（路由）
+轮播图采用mint-ui
+数据的加载 使用vue-resource  cnpm i vue-resource -S   main.js引入
+home.vue  数据逻辑处理 （导出，发起请求）使用v-for渲染数据到页面中
+组件切换效果（动画）,MUI九宫格改六宫格
+promise函数--------------详情查看E:\PHPTutorial\node\yibu\callback
+     * 异步操作（无法控制执行顺序）-------------回调函数可解决（promise）
+    //promise：ES6中新增d的构造函数（一个大容器，里面放些异步的任务），js语法支持
+    //创建promise容器（给出一个承诺）
+        捕获错误的两种方式：
+        1.需求第一个执行失败，不影响后续的操作（.then（）后续回调）。
+        2.第一个操作失败，后面的操作停止（.catch(err)捕获错误终止后续  console.log(err.message)）
+改造新闻链接的路由，并创建newslist组件
+            (使用mui中的meadia-list---绘制页面，
+            -----vue-resource获取数据(main.js安装配置好)
+            -----真实数据渲染到页面（见template注释部分),在路由配置文件中导入并配置,
+        在main.js文件中配置全局的时间过滤器，通过过滤器和moment.js插件格式化时间(app.vue padding-top/bottom设置)
+        实现新闻资讯列表，(newslist.vue和newsinfo.vue)点击跳转到详情，每项改造为router-link,
+                ----------创建新的newsinfo.vue
+                -----------在路由模块中将 新闻详情地址 和 组件 对应起来(发起设置一个方法reslut.body.massage，请求接收的方式1:$route.parms2:$route.query，)
+        评论功能--抽离到公共的组件comment.vue,
+                需要时引入此文件，详情见newsinfo.vue
+                -----获取所有的评论数据显示在页面中
+                --------点击加载更多功能(点击时调动一个新的方法，)
+                -----发表评论的功能（双向绑定，点击事件，校验评论内容用Tost提示，有效就通过vue-resource发送请求（注意发送格式），把数据提交给服务器，刷新列表，追加到comment开头-js的unshit()）
+图片分享功能的改造，创建---components/photos/photolist.vue
+         router.js中引入并匹配路由
+         制作顶部导航左右滑动（使用插件MUI---tab-top-webview-main-------去除mui-fullscreen样式-----导入MUI的js）
+                ---webpack中去掉严格模式：1npm i babel-plugin-transfrom-remove-strict-mode - D  2.babelrc中设置
+         制作下部分图片上下滑动（使用mint-ui的懒加载技术）,
+                --图片详情里面的缩略图片使用vue-preview图片预览插件（img的class不能去掉，必须有宽高）
+                --获取所有图片列表，渲染到页面
+商品购买的功能改造创建---components/photos/goodslist.vue
+                --设置样式
+                ------尝试在手机上测试预览（手机和电脑处于在同一个wifi-手机可以访问到电脑ip）,在package.json文件 dev中添加 --host把当前wifi地址设置为当前指令（cmd中ipconfig查看Ip）
+                --获取数据并展示，并且要分页，以及点击事件
+商品详情页面---components/photos/goodsinfo.vue
+            使用mui的card样式
+            获取轮播图数据getlunbotu()
+            抽离轮播图组件(轮播图片宽度问题？通过父组件向子组件传值解决)
+            数字按钮  MUI中的numberbox,引入其js
+            图文介绍页面/商品评论-注册点击事件，点击使用编程式导航，跳转到其页面中-----goodsdesc.vue和goodscomments.vue
+            使用钩子函数添加小球运动,小球加减数据的改动（子组件想父组件传值，本质是父组件向子组件传递方法同时获取其参数---goodsinfo.vue设置方法，事件绑定机制--子组件changed监听到变动就）
+            设置购买数量的最大最小值，涉及到整个项目数据的使用，需要用到vuex(相当于公共数据的管理)--data组件私有数据、props父组件传递给子组件数据
+                 vuex的安装和使用：
+                    1、srcipt引入2、npm install vuex --save,模块化打包文件引入，详情见main.js
+                 点击添加购物车，使用公共数据vuex,状态数据增加和本地数据化存
+             购物车页面的构造 shopcar.vue,数据的渲染，增删改，状态的双向绑定getgoodsselected（)如何把store商品状态同步到页面上？-----$store.getters.getgoodsselected[item.id]
+                                                                                                如何把选中的状态存到store中？----changed监听
+            商品价格的计算
+            返回按钮的实现mint-ui(this.$router.go(-1)是退回，this.$router.push()是进入某页面)
